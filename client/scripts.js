@@ -30,13 +30,8 @@ function postData() {
         data: JSON.stringify(newChirp)
     })
     .then(function(success){
-        console.log("APPENDING");
-        $('<div class="results"></div>').text(newChirp.message).appendTo(
-            $("#posts")
-        
-        ), function(err) {
-            console.log(err);
-        };
+        createDiv(chirpArray[i]);
+
     })
     .fail(function(xhr, status, error) {
         console.log('failing');
@@ -45,8 +40,16 @@ function postData() {
         console.log(error);
     });
 }
+var array = ['success', 'info', 'warning', 'danger'];
+var counter = 0;
 
-
+function createDiv(chirp) {
+    counter = counter + 1 > array.length ? 0 : counter + 1;
+    var className = "list-group-item list-group-item-" + array[counter];
+    var newDiv = $("<li class='" + className + "'></li>");
+    newDiv.text(chirp.user + ": " + chirp.message);
+    $(".list-group").append(newDiv);
+}
 
 function getData() {
     console.log("GETTING");
@@ -58,7 +61,7 @@ function getData() {
         console.log(success);
         $('#posts').empty();
         for (i = 0; i < success.length; i++) {
-            $('<div class="results"></div>').text(success[i].message).appendTo($('#posts'));
+            createDiv(success[i]);
         }
     })
 }
